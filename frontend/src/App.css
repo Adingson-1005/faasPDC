@@ -249,4 +249,34 @@ body {
   font-size: 0.85rem;
   line-height: 1.7;
   min-height: 200px;
+<<<<<<< HEAD
 }
+=======
+}
+
+.input-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: -0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.image-output {
+  margin-bottom: 1rem;
+}
+
+.image-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.output-image {
+  display: block;
+  max-width: 100%;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  image-rendering: pixelated;
+}
+>>>>>>> 41ab0c1 (lyresh push)

@@ -10,7 +10,13 @@ export default function App() {
   const [name, setName] = useState("");
   const [runtime, setRuntime] = useState("python");
   const [file, setFile] = useState(null);
+<<<<<<< HEAD
   const [output, setOutput] = useState("");
+=======
+  const [imageFile, setImageFile] = useState(null);
+  const [output, setOutput] = useState("");
+  const [outputImage, setOutputImage] = useState(null);
+>>>>>>> 41ab0c1 (lyresh push)
   const [loadingId, setLoadingId] = useState(null);
 
   const fetchFunctions = async () => {
@@ -28,6 +34,10 @@ export default function App() {
     form.append("name", name);
     form.append("runtime", runtime);
     form.append("file", file);
+<<<<<<< HEAD
+=======
+    if (imageFile) form.append("image", imageFile);
+>>>>>>> 41ab0c1 (lyresh push)
     await axios.post(`${API}/functions/upload`, form);
     alert("Function deployed!");
     fetchFunctions();
@@ -36,9 +46,29 @@ export default function App() {
 
   const handleInvoke = async (id) => {
     setLoadingId(id);
+<<<<<<< HEAD
     try {
       const res = await axios.post(`${API}/functions/${id}/invoke`, {});
       setOutput(JSON.stringify(res.data, null, 2));
+=======
+    setOutputImage(null);
+    try {
+      const res = await axios.post(`${API}/functions/${id}/invoke`, {});
+      const data = res.data;
+
+      // Check if stdout contains a base64 image marker
+      if (data.stdout && data.stdout.includes("IMAGE_OUTPUT_BASE64:")) {
+        const lines = data.stdout.split("\n");
+        const imgLine = lines.find(l => l.startsWith("IMAGE_OUTPUT_BASE64:"));
+        const b64 = imgLine.replace("IMAGE_OUTPUT_BASE64:", "").trim();
+        setOutputImage(b64);
+        // Show the rest of the text output without the base64 line
+        const textOnly = lines.filter(l => !l.startsWith("IMAGE_OUTPUT_BASE64:")).join("\n");
+        setOutput(JSON.stringify({ ...data, stdout: textOnly }, null, 2));
+      } else {
+        setOutput(JSON.stringify(data, null, 2));
+      }
+>>>>>>> 41ab0c1 (lyresh push)
       setTab("output");
     } finally {
       setLoadingId(null);
@@ -88,6 +118,16 @@ export default function App() {
             onChange={e => setFile(e.target.files[0])}
             className="input file-input"
           />
+<<<<<<< HEAD
+=======
+          <label className="input-label">Input Image (optional)</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => setImageFile(e.target.files[0])}
+            className="input file-input"
+          />
+>>>>>>> 41ab0c1 (lyresh push)
           <button onClick={handleDeploy} className="deploy-btn">
             🚀 Deploy
           </button>
@@ -132,9 +172,27 @@ export default function App() {
       )}
 
       {tab === "output" && (
+<<<<<<< HEAD
         <pre className="output-box">
           {output || "No output yet. Run a function first."}
         </pre>
+=======
+        <div>
+          {outputImage && (
+            <div className="image-output">
+              <p className="image-label">Grayscale Output:</p>
+              <img
+                src={`data:image/png;base64,${outputImage}`}
+                alt="Output"
+                className="output-image"
+              />
+            </div>
+          )}
+          <pre className="output-box">
+            {output || "No output yet. Run a function first."}
+          </pre>
+        </div>
+>>>>>>> 41ab0c1 (lyresh push)
       )}
     </div>
   );
