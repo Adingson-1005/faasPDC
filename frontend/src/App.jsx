@@ -31,8 +31,13 @@ export default function App() {
     form.append("runtime", runtime);
     form.append("file", file);
     if (imageFile) form.append("image", imageFile);
-    await axios.post(`${API}/functions/upload`, form);
-    alert("Function deployed!");
+    const res = await axios.post(`${API}/functions/upload`, form);
+    const deps = res.data.detected_deps || [];
+    if (deps.length > 0) {
+      alert(`Function deployed!\n\nDetected dependencies:\n${deps.map(d => `• ${d}`).join("\n")}\n\nThey will be auto-installed when you run it.`);
+    } else {
+      alert("Function deployed! No external dependencies detected.");
+    }
     fetchFunctions();
     setTab("functions");
   };
@@ -129,6 +134,9 @@ export default function App() {
                 <span className="fn-name">{fn.name}</span>
                 <span className="fn-runtime">({fn.runtime})</span>
                 <p className="fn-meta">ID: {fn.id} · {fn.filename}</p>
+                {fn.deps && fn.deps.length > 0 && (
+                  <p className="fn-deps">📦 {fn.deps.join(", ")}</p>
+                )}
               </div>
               <div className="fn-actions">
                 <button
