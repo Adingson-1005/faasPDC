@@ -108,7 +108,7 @@ def build_command(runtime: str, deps: list[str]) -> str:
     """
     if runtime == "python":
         if deps:
-            install = "pip install --quiet " + " ".join(deps) + " && "
+            install = "pip install --quiet --disable-pip-version-check --root-user-action=ignore " + " ".join(deps) + " && "
         else:
             install = ""
         return f'sh -c "{install}python /script"'
